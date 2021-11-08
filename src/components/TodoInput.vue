@@ -4,7 +4,7 @@
       type="text"
       v-model="newTodoItem"
       placeholder="Type what you have to do"
-      v-on:keyup.enter="addTodo"
+      @keyup.enter="addTodo"
     />
     <span class="addContainer" @click="addTodo">
       <i class="addBtn fas fa-plus" aria-hidden="true"></i>
@@ -23,7 +23,7 @@ export default {
     addTodo() {
       if (this.newTodoItem !== "") {
         const value = this.newTodoItem && this.newTodoItem.trim();
-        localStorage.setItem(value, value);
+        this.$emit("addTodo", value);
         this.clearInput();
       }
     },
