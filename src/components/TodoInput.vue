@@ -6,7 +6,7 @@
       placeholder="Type what you have to do"
       v-on:keyup.enter="addTodo"
     />
-    <span class="addContainer" v-on:click="addTodo">
+    <span class="addContainer" @click="addTodo">
       <i class="addBtn fas fa-plus" aria-hidden="true"></i>
     </span>
   </div>
