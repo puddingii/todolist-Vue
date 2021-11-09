@@ -23,20 +23,25 @@
       </li>
     </transition-group>
     <modal v-if="showModal" @close="showModal = false">
-      <h3 slot="header">변경</h3>
-      <input
-        slot="body"
-        v-model="updatedData.todoItem"
-        placeholder="수정할 텍스트를 입력하세요."
-      />
-      <span slot="footer" @click="showModal = false">
-        <span @click="updateTodo(updatedData.todoItem, updatedData.index)">
-          제출
-          <i class="checkBtn fas fa-check" aria-hidden="true"></i>
+      <template v-slot:header>
+        <h3>변경</h3>
+      </template>
+      <template v-slot:body>
+        <input
+          v-model="updatedData.todoItem"
+          placeholder="수정할 텍스트를 입력하세요."
+        />
+      </template>
+      <template v-slot:footer>
+        <span @click="showModal = false">
+          <span @click="updateTodo(updatedData.todoItem, updatedData.index)">
+            제출
+            <i class="checkBtn fas fa-check" aria-hidden="true"></i>
+          </span>
+          닫기
+          <i class="closeModalBtn fas fa-times" aria-hidden="true"></i>
         </span>
-        닫기
-        <i class="closeModalBtn fas fa-times" aria-hidden="true"></i>
-      </span>
+      </template>
     </modal>
   </section>
 </template>
