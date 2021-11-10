@@ -34,7 +34,8 @@ export default {
     addTodo() {
       if (this.newTodoItem !== "") {
         const value = this.newTodoItem && this.newTodoItem.trim();
-        this.$emit("addTodo", value);
+        const obj = { completed: false, item: value };
+        this.$emit("addTodo", obj);
         this.clearInput();
       } else {
         this.showModal = !this.showModal;

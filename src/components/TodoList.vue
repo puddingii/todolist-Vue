@@ -1,14 +1,14 @@
 <template>
   <section>
     <transition-group name="list" tag="ul">
-      <li v-for="(todoItem, index) in propsdata" :key="todoItem" class="shadow">
-        <i class="checkBtn fas fa-check" aria-hidden="true"></i>
-        {{ todoItem }}
+      <li v-for="(todoItem, index) in propsdata" :key="todoItem.item" class="shadow">
+        <i class="checkBtn fas fa-check" :class="{checkBtnCompleted: todoItem.completed}" @click="toggleComplete(todoItem, index)"></i>
+        <span :class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
         <div class="actionBtn">
           <span
             class="updateBtn"
             type="button"
-            @click="showUpdateModal(todoItem, index)"
+            @click="showUpdateModal(todoItem.item, index)"
           >
             <i class="far fa-edit" aria-hidden="true"></i>
           </span>
@@ -28,13 +28,13 @@
       </template>
       <template v-slot:body>
         <input
-          v-model="updatedData.todoItem"
+          v-model="updatedData.todoInfo.item"
           placeholder="수정할 텍스트를 입력하세요."
         />
       </template>
       <template v-slot:footer>
         <span @click="showModal = false">
-          <span @click="updateTodo(updatedData.todoItem, updatedData.index)">
+          <span @click="updateTodo(updatedData.todoInfo.item, updatedData.todoInfo.index)">
             제출
             <i class="checkBtn fas fa-check" aria-hidden="true"></i>
           </span>
@@ -60,13 +60,16 @@ export default {
     removeTodo(todoItem, index) {
       this.$emit("removeTodo", todoItem, index);
     },
-    showUpdateModal(todoItem, index) {
-      this.updatedData = { todoItem, index };
+    showUpdateModal(todoInfo, index) {
+      this.updatedData = { todoInfo, index };
       this.showModal = !this.showModal;
     },
     updateTodo(todoItem, index) {
       this.$emit("updateTodo", todoItem, index);
     },
+    toggleComplete(todoItem, index) {
+      this.$emit("updateToggle", todoItem, index);
+    }
   },
   components: {
     Modal,
@@ -113,5 +116,9 @@ li {
 }
 .removeBtn {
   color: #de4343;
+}
+.textCompleted {
+  text-decoration: line-through;
+  color: #b3adad;
 }
 </style>
