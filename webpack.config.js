@@ -1,10 +1,8 @@
 var path = require('path')
 var webpack = require('webpack')
-var VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
   entry: './src/main.js',
-  plugins: [new VueLoaderPlugin()],
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
@@ -49,11 +47,13 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
+    noInfo: true,
+    overlay: true
   },
   performance: {
     hints: false
   },
-  devtool: 'eval-source-map'
+  devtool: '#eval-source-map'
 }
 
 if (process.env.NODE_ENV === 'production') {
