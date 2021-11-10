@@ -5,6 +5,7 @@
 </template>
 
 <script>
+// Presentation Component(하위 컴포넌트)
 export default {
   methods: {
     clearTodo() {

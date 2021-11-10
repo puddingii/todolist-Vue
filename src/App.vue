@@ -1,18 +1,16 @@
 <template>
   <div id="app">
     <TodoHeader></TodoHeader>
-    <TodoInput @addTodo="addTodo"></TodoInput>
+    <TodoInput></TodoInput>
     <TodoList
-      @removeTodo="removeTodo"
-      @updateTodo="updateTodo"
       @updateToggle="updateToggle"
-      v-bind:propsdata="todoItems"
     ></TodoList>
     <TodoFooter @removeAll="clearAll"></TodoFooter>
   </div>
 </template>
 
 <script>
+// Container Component(상위 컴포넌트) 현재 작성한건 중앙 관리식 데이터 조작
 import TodoHeader from "./components/TodoHeader.vue";
 import TodoInput from "./components/TodoInput.vue";
 import TodoList from "./components/TodoList.vue";
@@ -23,30 +21,7 @@ export default {
       todoItems: [],
     };
   },
-  created() {
-    if (localStorage.length > 0) {
-      for (let i = 0; i < localStorage.length; i++) {
-        console.log(localStorage.key(i));
-        if (localStorage.key(i) !== "loglevel:webpack-dev-server") {
-          this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
-        }
-      }
-    }
-  },
   methods: {
-    addTodo(todoItem) {
-      localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
-      this.todoItems.push(todoItem);
-    },
-    removeTodo(todoItem, index) {
-      localStorage.removeItem(todoItem.item);
-      this.todoItems.splice(index, 1);
-    },
-    updateTodo(updateItem, index) {
-      const beforeItem = this.todoItems[index];
-      this.removeTodo(beforeItem, index);
-      this.addTodo(updateItem);
-    },
     updateToggle(updateItem, index) {
       this.todoItems[index].completed = !this.todoItems[index].completed;
       localStorage.removeItem(updateItem.item);

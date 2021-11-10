@@ -1,14 +1,14 @@
 <template>
   <section>
     <transition-group name="list" tag="ul">
-      <li v-for="(todoItem, index) in propsdata" :key="todoItem.item" class="shadow">
+      <li v-for="(todoItem, index) in this.$store.state.todoItems" :key="todoItem.item" class="shadow">
         <i class="checkBtn fas fa-check" :class="{checkBtnCompleted: todoItem.completed}" @click="toggleComplete(todoItem, index)"></i>
         <span :class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
         <div class="actionBtn">
           <span
             class="updateBtn"
             type="button"
-            @click="showUpdateModal(todoItem.item, index)"
+            @click="showUpdateModal(todoItem, index)"
           >
             <i class="far fa-edit" aria-hidden="true"></i>
           </span>
@@ -28,13 +28,13 @@
       </template>
       <template v-slot:body>
         <input
-          v-model="updatedData.todoInfo.item"
+          v-model="updatedData.item"
           placeholder="수정할 텍스트를 입력하세요."
         />
       </template>
       <template v-slot:footer>
         <span @click="showModal = false">
-          <span @click="updateTodo(updatedData.todoInfo.item, updatedData.todoInfo.index)">
+          <span @click="updateTodo(updatedData)">
             제출
             <i class="checkBtn fas fa-check" aria-hidden="true"></i>
           </span>
@@ -55,17 +55,18 @@ export default {
       showModal: false,
     };
   },
-  props: ["propsdata"],
   methods: {
     removeTodo(todoItem, index) {
-      this.$emit("removeTodo", todoItem, index);
+      this.$store.commit("removeTodo", {todoItem, index});
     },
-    showUpdateModal(todoInfo, index) {
-      this.updatedData = { todoInfo, index };
+    showUpdateModal(todoItem, index) {
+      this.updatedData = { item: todoItem.item, completed: todoItem.completed, index };
       this.showModal = !this.showModal;
     },
-    updateTodo(todoItem, index) {
-      this.$emit("updateTodo", todoItem, index);
+    updateTodo(todoItem) {
+      const beforeItem = this.$store.state.todoItems[todoItem.index];
+      this.$store.commit("removeTodo", { todoItem: beforeItem, index: todoItem.index });
+      this.$store.commit("addTodo", todoItem);
     },
     toggleComplete(todoItem, index) {
       this.$emit("updateToggle", todoItem, index);
@@ -80,7 +81,7 @@ export default {
 <style scoped>
 .list-enter-active,
 .list-leave-active {
-  transition: all 1s;
+  transition: all 0.3s;
 }
 .list-enter,
 .list-leave-to {

@@ -11,12 +11,18 @@
     </span>
 
     <modal v-if="showModal" @close="showModal = false">
-      <h3 slot="header">경고</h3>
-      <p slot="body">할 일을 입력하세요.</p>
-      <span slot="footer" @click="showModal = false">
-        닫기
-        <i class="closeModalBtn fas fa-times" aria-hidden="true"></i>
-      </span>
+      <template v-slot:header>
+        <h3 slot="header">경고</h3>
+      </template>
+      <template v-slot:body>
+        <p>할 일을 입력하세요.</p>
+      </template>
+      <template v-slot:footer>
+        <span @click="showModal = false">
+          닫기
+          <i class="closeModalBtn fas fa-times" aria-hidden="true"></i>
+        </span>
+      </template>
     </modal>
   </div>
 </template>
@@ -33,9 +39,7 @@ export default {
   methods: {
     addTodo() {
       if (this.newTodoItem !== "") {
-        const value = this.newTodoItem && this.newTodoItem.trim();
-        const obj = { completed: false, item: value };
-        this.$emit("addTodo", obj);
+        this.$store.commit("addTodo", {completed: false, item: this.newTodoItem});
         this.clearInput();
       } else {
         this.showModal = !this.showModal;
