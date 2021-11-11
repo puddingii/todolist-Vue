@@ -6,11 +6,10 @@
 
 <script>
 // Presentation Component(하위 컴포넌트)
+import { mapMutations } from "vuex";
 export default {
   methods: {
-    clearTodo() {
-      this.$emit("removeAll");
-    },
+    ...mapMutations({ clearTodo: "clearAll" })
   },
 };
 </script>

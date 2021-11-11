@@ -1,8 +1,8 @@
 <template>
   <section>
     <transition-group name="list" tag="ul">
-      <li v-for="(todoItem, index) in this.$store.state.todoItems" :key="todoItem.item" class="shadow">
-        <i class="checkBtn fas fa-check" :class="{checkBtnCompleted: todoItem.completed}" @click="toggleComplete(todoItem, index)"></i>
+      <li v-for="(todoItem, index) in this.storedTodoItems" :key="todoItem.item" class="shadow">
+        <i class="checkBtn fas fa-check" :class="{checkBtnCompleted: todoItem.completed}" @click="toggleComplete({todoItem, index})"></i>
         <span :class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
         <div class="actionBtn">
           <span
@@ -15,7 +15,7 @@
           <span
             class="removeBtn"
             type="button"
-            @click="removeTodo(todoItem, index)"
+            @click="removeTodo({todoItem, index})"
           >
             <i class="far fa-trash-alt" aria-hidden="true"></i>
           </span>
@@ -48,6 +48,8 @@
 
 <script>
 import Modal from "./common/Modal.vue";
+import { mapGetters, mapMutations } from "vuex";
+
 export default {
   data() {
     return {
@@ -56,9 +58,10 @@ export default {
     };
   },
   methods: {
-    removeTodo(todoItem, index) {
-      this.$store.commit("removeTodo", {todoItem, index});
-    },
+    ...mapMutations({ 
+      removeTodo: "removeTodo",
+      toggleComplete: "updateToggle" 
+    }),
     showUpdateModal(todoItem, index) {
       this.updatedData = { item: todoItem.item, completed: todoItem.completed, index };
       this.showModal = !this.showModal;
@@ -67,10 +70,10 @@ export default {
       const beforeItem = this.$store.state.todoItems[todoItem.index];
       this.$store.commit("removeTodo", { todoItem: beforeItem, index: todoItem.index });
       this.$store.commit("addTodo", todoItem);
-    },
-    toggleComplete(todoItem, index) {
-      this.$emit("updateToggle", todoItem, index);
     }
+  },
+  computed: {
+    ...mapGetters(['storedTodoItems'])
   },
   components: {
     Modal,

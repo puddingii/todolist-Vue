@@ -2,10 +2,8 @@
   <div id="app">
     <TodoHeader></TodoHeader>
     <TodoInput></TodoInput>
-    <TodoList
-      @updateToggle="updateToggle"
-    ></TodoList>
-    <TodoFooter @removeAll="clearAll"></TodoFooter>
+    <TodoList></TodoList>
+    <TodoFooter></TodoFooter>
   </div>
 </template>
 
@@ -22,15 +20,6 @@ export default {
     };
   },
   methods: {
-    updateToggle(updateItem, index) {
-      this.todoItems[index].completed = !this.todoItems[index].completed;
-      localStorage.removeItem(updateItem.item);
-      localStorage.setItem(updateItem.item, JSON.stringify(this.todoItems[index]));
-    },
-    clearAll() {
-      localStorage.clear();
-      this.todoItems = [];
-    },
   },
   components: {
     TodoHeader,
